@@ -83,7 +83,10 @@ class App extends Component {
     /* Arrow function syntax used for Autobinding, see details here : https://facebook.github.io/react/docs/react-without-es6.html#autobinding */
     fetchWeather = async ( event ) => {
 
+
         event.preventDefault()
+
+
 
         /* ASYNC - AWAIT DOCUMENTATION : https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Op%C3%A9rateurs/await */
 
@@ -125,90 +128,24 @@ class App extends Component {
     //will return an updated weather object (same object + one image)
     fetchPicture = async ( weather ) => {
         try {
+			
+			
+			
 
-            const pictures = await get( ENDPOINTS.PIXABAY_API_URL, {
-                //YOU NEED TO PROVIDE YOUR "PIXABAY" API KEY HERE (see /utils/api.js file to grab the DOCUMENTATION link)
-                key: '3658891-beeef4fdb6b8a762ab78e1cf9',
-                q: weather.location.name + '+city',
-                image_type: 'all',
-                safesearch: true
-            } )
-
-            //if we have results
-            if ( pictures.hits.length ) {
-                //saving the first picture of the results in our weather object
-                weather.pixabayPicture = pictures.hits[ 0 ].webformatURL
-            }
-            //else we save a defalut picture in our weather object
-            else {
-                weather.pixabayPicture = defaultPicture
-            }
-
-        }
-        //same default picture is saved if the image request fails
-        catch ( error ) {
-
-            weather.pixabayPicture = defaultPicture
-
-            Materialize.toast( error, 8000, 'error-toast' )
-            console.log( 'Failed fetching picture: ', error )
-        }
-
-        return weather
-    }
+function myMap() {
+  var mapCanvas = document.getElementById("map");
+  var mapOptions = {
+    center: new google.maps.LatLng(45.434046,12.340284),
+    zoom:18,
+    mapTypeId:google.maps.MapTypeId.HYBRID
+  };
+  var map = new google.maps.Map(mapCanvas,mapOptions);
+}
 
 
-    //handle display of the received weather object
-    displayWeatherInfo = () => {
-        const weather = this.state.weather
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEUQaWCYmnLGlcFoRs30e8LDcvoPygWc8&callback=myMap"></script>
 
-        /*
-            DATA FORMAT SENT BY THE API LOKKS LIKE THIS :
-    
-            {
-                "pixabayPicture": string, //CUSTOM ADD VIA PIXABAY API CALL
-                "location": {
-                    "name": string,
-                    "region": string,
-                    "country": string,
-                    "lat": number,
-                    "lon": number,
-                    "tz_id": string,
-                    "localtime_epoch": number,
-                    "localtime": string
-                },
-                "current": {
-                    "temp_c": number,
-                    "is_day": boolean,
-                    "condition": {
-                        "text": string,
-                        "icon": string
-                    },
-                    "wind_kph": number
-                }
-            }
-    
-        */
-
-        if ( weather ) {
-
-            const locationName = weather.location.name
-            const temperature = weather.current.temp_c
-            const weatherConditionText = weather.current.condition.text
-            const weatherConditionIcon = weather.current.condition.icon
-            const windSpeed = weather.current.wind_kph
-            const picture = weather.pixabayPicture
-
-            return (
-                <WeatherCard
-                    locationName={ locationName }
-                    temperature={ temperature }
-                    weatherConditionText={ weatherConditionText }
-                    weatherConditionIcon={ weatherConditionIcon }
-                    windSpeed={ windSpeed }
-                    picture={ picture } />
-            )
-        }
+           
 
         return null
     }
